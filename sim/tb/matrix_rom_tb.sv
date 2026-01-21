@@ -59,9 +59,9 @@ module matrix_rom_tb;
 
 
     // data at each posedge corresponds to the previous cycle's addr. at each rising edge, `data` is the content of the address that was present at that edge, which is the address set in the previous iteration.
-    for (a = 1; a < DEPTH; a++) begin                   // we start at 1 because address 0 was already set before the first clock edge. After that first edge, data should now contain address 0's value
+    for (a = 1; a < DEPTH; a++) begin                                       // we start at 1 because address 0 was already set before the first clock edge. After that first edge, data should now contain address 0's value
 
-      if (data !== exp_prev) begin                      // compare actual output `data` to expected `exp_prev`
+      if (data !== exp_prev) begin                                          // compare actual output `data` to expected `exp_prev`
         $error("Mismatch: expected %0d (0x%0h) but got %0d (0x%0h)",        // if an error occurs, the error message prints with both decimal and hex forms. 
                exp_prev, exp_prev, data, data);
         $finish;
