@@ -20,7 +20,7 @@ module matrix_rom # (
 
     initial begin                               // runs once at time 0 in simulation. These are the initial contents of the memory
         $readmemh(MEMFILE, mem);                // read text file "A.mem" as hex numbers. Fill mem[0], then mem[1], ...
-    end
+    end                                         // Address mapping for a 4x4 matrix with elements listed in row-major order follows A[row][col] -> mem[row*4 + col]
     
     /*
     The code below describes how the memory is read into data. At rising edge of clk, data updates to addr's content. In some cases,
