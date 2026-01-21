@@ -18,9 +18,11 @@ module matrix_rom # (
 
     logic signed [DATA_W-1:0] mem [0:DEPTH-1];  // declares the storage array mem. Each element is DATA_W bits wide and signed; there are DEPTH elements, indexed from 0 to DEPTH-1
 
-    initial begin                               // runs once at time 0 in simulation. These are the initial contents of the memory
-        $readmemh(MEMFILE, mem);                // read text file "A.mem" as hex numbers. Fill mem[0], then mem[1], ...
-    end                                         // Address mapping for a 4x4 matrix with elements listed in row-major order follows A[row][col] -> mem[row*4 + col]
+    initial begin     
+        // $display("matrix_rom: loading %s", MEMFILE);                        // debug print statement
+        $readmemh(MEMFILE, mem);                                              // read text file "A.mem" as hex numbers. Fill mem[0], then mem[1], ...
+        // $display("matrix_rom: mem[0]=0x%0h mem[1]=0x%0h", mem[0], mem[1]);  // debug print statement
+    end                                                                       // Address mapping for a 4x4 matrix with elements listed in row-major order follows A[row][col] -> mem[row*4 + col]
     
     /*
     The code below describes how the memory is read into data. At rising edge of clk, data updates to addr's content. In some cases,
