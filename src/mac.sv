@@ -15,7 +15,6 @@ module mac # (
 localparam int KCNT_W  = (K <= 1) ? 1 : $clog2(K+1);        // counter must be able to represent values up to K (and avoid zero width when K=1)
 
 logic signed [ACC_W-1: 0] mult_reg;  // The register holding the a_in, b_in product does not need ACC_W bits to store the worst case value. I chose a width of ACC_W because I want to avoid any potential issues that might (or might not) arise if mult_reg and acc_out are of different sizes.
-logic acc_clear_prev;
 logic [KCNT_W:0] k_sum;                  // num of terms added in current dot product
 
 
@@ -58,8 +57,6 @@ always_ff @(posedge clk) begin
         end
         else begin
             // Once valid, we hold the result until the controller asserts acc_clear to begin the next dot product.
-            acc_out <= acc_out;
-            k_sum <= k_sum;
             acc_out_valid <= 1;
         end
     end
