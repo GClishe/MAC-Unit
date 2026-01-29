@@ -1,11 +1,13 @@
 `timescale 1ns/1ps
 
+// transmits 10-bit message; one start bit (0), then an 8 bit message, then one stop bit (1)
+
 module uart_tx #(
     parameter int unsigned CLKS_PER_BIT = 868       // num of FPGA clk cycles per UART bit time. If we want to change this number, size of clk_cnt should be dynamically sized. For now, i am not concerned with that.
 )(
     input  logic        clk,            
     input  logic        rst,            // synchronous reset; only checked in @posedge(clk)
-    input  logic        start_i,        // pulse requesting a transmit
+    input  logic        start_i,        // one-cycle pulse requesting a transmit
     input  logic [7:0]  data_i,         // byte to sent 
     output logic        tx_o,           // UART tx line output (idle high)
     output logic        busy_o          // indicates transmitter is active/not ready
@@ -47,7 +49,7 @@ module uart_tx #(
                     end
                 end
 
-                T_START: begin              // in start state, we hold tx_o low for CLKS_PER_BIT cycles
+                T_START: begin              // in start state, we hold tx_o low for CLKS_PER_BIT cycles. Tx transmissions have a start bit of 0
                     tx_o <= 1'b0;           // lowering tx_o flag; no longer idle
                     if (clk_cnt == (CLKS_PER_BIT - 1)) begin
                         clk_cnt <= 16'd0;   
@@ -72,7 +74,7 @@ module uart_tx #(
                     end
                 end
 
-                T_STOP: begin           // holds stop bit high for one period and then return to idle
+                T_STOP: begin           // holds stop bit high for one period and then return to idle. Tx transmissions have stop bit of 1
                     tx_o <= 1'b1;           
                     if (clk_cnt == (CLKS_PER_BIT - 1)) begin
                         clk_cnt <= 16'd0;
